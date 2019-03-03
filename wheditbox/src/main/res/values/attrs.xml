@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WHEditBox">
+        <attr name="backgroundStyle" format="reference" />
+        <attr name="selectBackgroundStyle" format="reference" />
+        <attr name="setDelBtn" format="boolean" />
+        <attr name="setShowTextBtn" format="boolean" />
+        <attr name="setClickShowDialog" format="boolean" />
+    </declare-styleable>
+</resources>
