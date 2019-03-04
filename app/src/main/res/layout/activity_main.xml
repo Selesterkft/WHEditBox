@@ -32,7 +32,9 @@
         app:backgroundStyle="@drawable/editboxbackground"
         app:selectBackgroundStyle="@drawable/editboxbackground_focus"
         app:setDelBtn="true"
-        app:setClickShowDialog="true"
+        app:textSize="12dp"
+        app:innerPadding="4dp"
+        app:writeType="None"
         />
 
     <mobil.selester.wheditbox.WHEditBox
@@ -47,13 +49,43 @@
         app:backgroundStyle="@drawable/editboxbackground"
         app:selectBackgroundStyle="@drawable/editboxbackground_focus"
         app:setDelBtn="true"
-        app:setClickShowDialog="true"
+        app:writeType="FocusDialog"
+        />
+    <mobil.selester.wheditbox.WHEditBox
+        android:id="@+id/customEB2"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/customEB1"
+        app:backgroundStyle="@drawable/editboxbackground"
+        app:selectBackgroundStyle="@drawable/editboxbackground_focus"
+        app:setDelBtn="true"
+        app:writeType="ClickDialog"
+        />
+    <mobil.selester.wheditbox.WHEditBox
+        android:id="@+id/customEB3"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/customEB2"
+        app:backgroundStyle="@drawable/editboxbackground"
+        app:selectBackgroundStyle="@drawable/editboxbackground_focus"
+        app:setDelBtn="true"
+        app:writeType="ClickKeyboard"
         />
 
    <EditText
        android:id="@+id/et"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
+       android:textSize="12dp"
+       android:text="Proba"
        />
 
 </android.support.constraint.ConstraintLayout>
