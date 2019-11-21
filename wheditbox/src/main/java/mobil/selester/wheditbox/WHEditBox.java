@@ -138,7 +138,7 @@ public class WHEditBox extends LinearLayout {
             et.setSelection(et.getText().length());
             et.setInputType(EDText.getInputType());
             et.addTextChangedListener(textWatcher);
-            //et.requestFocus();
+            et.requestFocus();
             builder.setView(et);
             builder.setPositiveButton("Megadás", new DialogInterface.OnClickListener() {
                 @Override
