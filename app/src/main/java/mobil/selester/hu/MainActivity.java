@@ -14,18 +14,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         WHEditBox ceb = findViewById(R.id.customEB);
-        ceb.setDialogBox(this);
-        ceb.setSuffix("#&");
+        WHEditBox.activity = this;
+        WHEditBox.suffix = "#&";
+        ceb.setMinLength(2);
+        ceb.setTrimFrom(4);
+        ceb.setTrimTo(7);
+
+        ceb.setTextType(WHEditBox.TEXTTYPE_Int);
+
         ceb.EDText.setText("proba");
-        ceb.EDText.setInputType(InputType.TYPE_CLASS_NUMBER);
         ceb.setOnDetectBarcodeListener(new WHEditBox.OnDetectBarcodeListener() {
             @Override
-            public void OnDetectBarcode() {
+            public void OnDetectBarcode(String s) {
                 Log.i("TAG","OK");
             }
+
+            @Override
+            public void OnDetectError(String errorResult, String value) {
+                Log.i("TAG",errorResult);
+            }
         });
-        WHEditBox ceb1 = findViewById(R.id.customEB1);
-        ceb1.setDialogBox(this);
     }
 
 }
