@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         WHEditBox ceb = findViewById(R.id.customEB);
         WHEditBox.activity = this;
         WHEditBox.suffix = "#&";
-        ceb.setMinLength(2);
+        ceb.setErrorContent(WHEditBox.ERRORCONTENT_Erase);
         ceb.setTrimFrom(4);
         ceb.setTrimTo(7);
 
@@ -32,6 +32,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void OnDetectError(String errorResult, String value) {
                 Log.i("TAG",errorResult);
+            }
+
+            @Override
+            public void OnFocusOutListener(String value) {
+                Log.i("TAG","OUT");
+            }
+
+            @Override
+            public void OnFocusInListener(String value) {
+                Log.i("TAG","IN");
             }
         });
     }

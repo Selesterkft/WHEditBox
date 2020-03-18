@@ -4,12 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
-import android.print.PrinterId;
-import android.support.annotation.StyleableRes;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
@@ -36,6 +31,8 @@ public class WHEditBox extends LinearLayout {
     public interface OnDetectBarcodeListener{
         void OnDetectBarcode(String value);
         void OnDetectError(String errorResult, String value);
+        void OnFocusOutListener(String value);
+        void OnFocusInListener(String value);
     }
 
     public EditText EDText;
@@ -49,6 +46,7 @@ public class WHEditBox extends LinearLayout {
 
     public static int TEXTTYPE_String           = 0;
     public static int TEXTTYPE_Int              = 1;
+    public static int TEXTTYPE_Long             = 2;
 
     public static int ERRORCONTENT_Nothing      = 0;
     public static int ERRORCONTENT_Erase        = 1;
@@ -154,6 +152,27 @@ public class WHEditBox extends LinearLayout {
         setDelBtnFunc( setDelBtn );
         if(textSize > 0) EDText.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         setInnerPadding(innerPadding);
+        detect = new OnDetectBarcodeListener() {
+            @Override
+            public void OnDetectBarcode(String value) {
+
+            }
+
+            @Override
+            public void OnDetectError(String errorResult, String value) {
+
+            }
+
+            @Override
+            public void OnFocusOutListener(String value) {
+
+            }
+
+            @Override
+            public void OnFocusInListener(String value) {
+
+            }
+        };
     }
 
     public void setOnDetectBarcodeListener(OnDetectBarcodeListener onDetectBarcodeListener){
@@ -181,8 +200,7 @@ public class WHEditBox extends LinearLayout {
                 String errorString = checker(_text);
                 EDText.setText(_text);
                 if( !errorString.equals("000") ){
-                    if(getErrorContent() == ERRORCONTENT_Nothing){
-                    }else if(getErrorContent() == ERRORCONTENT_Erase){
+                    if(getErrorContent() == ERRORCONTENT_Erase){
                         EDText.setText("");
                     }else if(getErrorContent() == ERRORCONTENT_SelectedAll){
                         EDText.selectAll();
@@ -206,7 +224,6 @@ public class WHEditBox extends LinearLayout {
     private void setEditTextFunction() {
         if( writeType != WRITETYPE_None) {
             EDText.setOnTouchListener(new OnTouchListener(){
-
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     int inType = EDText.getInputType(); // backup the input type
@@ -216,6 +233,7 @@ public class WHEditBox extends LinearLayout {
                     return true; // consume touch even
                 }
             });
+
         }
 
         if( writeType == WRITETYPE_ClickKeyboard || writeType == WRITETYPE_ClickDialog || writeType == WRITETYPE_FocusDialog) {
@@ -237,8 +255,6 @@ public class WHEditBox extends LinearLayout {
         EDText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                Log.i("TAG","FOCUS: "+EDText.getText().toString() + ", hasFocus: " + hasFocus );
-
                 activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                 InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(EDText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -264,14 +280,17 @@ public class WHEditBox extends LinearLayout {
                     String errorString = checker(_text);
                     EDText.setText(_text);
                     if( !errorString.equals("000") ){
-                        if(getErrorContent() == ERRORCONTENT_Nothing){
-                        }else if(getErrorContent() == ERRORCONTENT_Erase){
+                        if(getErrorContent() == ERRORCONTENT_Erase){
                             EDText.setText("");
                         }else if(getErrorContent() == ERRORCONTENT_SelectedAll){
                             EDText.selectAll();
                         }
                         detect.OnDetectError( errorString, EDText.getText().toString() );
+                    }else{
+                        detect.OnFocusOutListener(EDText.getText().toString());
                     }
+                }else{
+                    detect.OnFocusInListener(EDText.getText().toString());
                 }
             }
         });
@@ -448,12 +467,28 @@ public class WHEditBox extends LinearLayout {
                 result = changeStringatIndex(2, result, '1');
             }
         }
+        if(getTextType() == TEXTTYPE_Long){
+            if( !isLong(EdText) ){
+                result = changeStringatIndex(2, result, '1');
+            }
+        }
         return  result;
     }
 
     public static boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
+        } catch(NumberFormatException e) {
+            return false;
+        } catch(NullPointerException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isLong(String s) {
+        try {
+            Long.parseLong(s);
         } catch(NumberFormatException e) {
             return false;
         } catch(NullPointerException e) {
