@@ -212,7 +212,6 @@ public class WHEditBox extends LinearLayout {
                         imm.hideSoftInputFromWindow(popup.getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                         popup.dismiss();
                     }
-                    fireFunction();
                     detect.OnDetectBarcode( EDText.getText().toString() );
                 }
             }
@@ -410,7 +409,6 @@ public class WHEditBox extends LinearLayout {
                                 imm.hideSoftInputFromWindow(popup.getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                                 popup.dismiss();
                             }
-                            fireFunction();
                             detect.OnDetectBarcode( EDText.getText().toString() );
                         }
                     }
@@ -419,7 +417,7 @@ public class WHEditBox extends LinearLayout {
         }
     };
 
-    private void fireFunction(){
+    public void fireFunction(){
         if( nextET != null ){
             nextET.requestFocus();
         }
