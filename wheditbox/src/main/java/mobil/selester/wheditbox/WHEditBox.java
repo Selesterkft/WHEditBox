@@ -205,14 +205,14 @@ public class WHEditBox extends LinearLayout {
                     }else if(getErrorContent() == ERRORCONTENT_SelectedAll){
                         EDText.selectAll();
                     }
-                    detect.OnDetectError( errorString, EDText.getText().toString() );
+                    detect.OnDetectError( errorString, _text );
                 }else {
                     if (popup != null) {
                         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(popup.getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                         popup.dismiss();
                     }
-                    detect.OnDetectBarcode( EDText.getText().toString() );
+                    detect.OnDetectBarcode( _text );
                 }
             }
             return false;
