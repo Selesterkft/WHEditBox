@@ -72,6 +72,14 @@ public class WHEditBox extends LinearLayout {
 
     private int uniqueColumn = -1;
 
+    private int counterColumn = -1;
+    private int maxCount = -1;
+
+    public void setCounter(int counterColumn, int maxCount) {
+        this.counterColumn = counterColumn;
+        this.maxCount = maxCount;
+    }
+
     public void setDataSource(List<String[]> dataSource) {
         this.dataSource = dataSource;
     }
@@ -152,7 +160,7 @@ public class WHEditBox extends LinearLayout {
         setTrimTo(0);
         setTextType(TEXTTYPE_String);
         errorContent = ERRORCONTENT_Nothing;
-        chkString ="0000";
+        chkString ="00000";
         BG = typedArray.getResourceId(R.styleable.WHEditBox_backgroundStyle,0);
         boolean setDelBtn = typedArray.getBoolean(R.styleable.WHEditBox_setDelBtn,false);
         selectBG = typedArray.getResourceId(R.styleable.WHEditBox_selectBackgroundStyle,0);
@@ -212,7 +220,7 @@ public class WHEditBox extends LinearLayout {
                 String _text = EDText.getText().toString();
                 String errorString = checker(_text);
                 EDText.setText(_text);
-                if( !errorString.equals("0000") ){
+                if( !errorString.equals("00000") ){
                     if(getErrorContent() == ERRORCONTENT_Erase){
                         EDText.setText("");
                     }else if(getErrorContent() == ERRORCONTENT_SelectedAll){
@@ -291,7 +299,7 @@ public class WHEditBox extends LinearLayout {
                     String _text = EDText.getText().toString();
                     String errorString = checker(_text);
                     EDText.setText(_text);
-                    if( !errorString.equals("0000") ){
+                    if( !errorString.equals("00000") ){
                         if(getErrorContent() == ERRORCONTENT_Erase){
                             EDText.setText("");
                         }else if(getErrorContent() == ERRORCONTENT_SelectedAll){
@@ -408,7 +416,7 @@ public class WHEditBox extends LinearLayout {
                         _text = trimFromTo( _text );
                         String errorString = checker(_text);
                         EDText.setText(_text);
-                        if( !errorString.equals("0000") ){
+                        if( !errorString.equals("00000") ){
                             if(getErrorContent() == ERRORCONTENT_Nothing){
                             }else if(getErrorContent() == ERRORCONTENT_Erase){
                                 EDText.setText("");
@@ -462,7 +470,7 @@ public class WHEditBox extends LinearLayout {
 
         // MinLength, MaxLength, TextType, Unique
 
-        String result = "0000";
+        String result = "00000";
         if(getMinLength() > 0){
             if( EdText.length() < getMinLength() ){
                 result = changeStringatIndex(0, result, '1');
@@ -488,6 +496,17 @@ public class WHEditBox extends LinearLayout {
                 if (dataSource.get(dsNum)[uniqueColumn].equals(EdText)) {
                     result = changeStringatIndex(3, result, '1');
                 }
+            }
+        }
+        if( maxCount > 0 && counterColumn > -1){
+            int count = 0;
+            for (int dsNum = 0; dsNum < dataSource.size(); dsNum++) {
+                if (dataSource.get(dsNum)[counterColumn].equals(EdText)) {
+                    count++;
+                }
+            }
+            if(count >= maxCount){
+                result = changeStringatIndex(4, result, '1');
             }
         }
         return  result;

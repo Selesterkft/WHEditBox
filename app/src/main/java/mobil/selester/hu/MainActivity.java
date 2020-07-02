@@ -25,13 +25,12 @@ public class MainActivity extends AppCompatActivity {
 
         ceb.setTextType(WHEditBox.TEXTTYPE_String);
 
-        ceb.setUniqueColumn(1);
         List<String[]> list = new ArrayList<>();
         String[] row = new String[5];
         row[0] = "a1";row[1] = "b1";row[2] = "c1";row[3] = "d1";row[4] = "e1";
         list.add( row );
         String[] row1 = new String[5];
-        row1[0] = "a2";row1[1] = "b2";row1[2] = "c2";row1[3] = "d2";row1[4] = "e2";
+        row1[0] = "a2";row1[1] = "b1";row1[2] = "c1";row1[3] = "d2";row1[4] = "e2";
         list.add( row1 );
         Log.i("TAG",list.get(1)[2]);
         ceb.setDataSource(list);
