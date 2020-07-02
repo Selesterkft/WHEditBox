@@ -26,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
         ceb.setTrimTo(3);
 
         ceb.setTextType(WHEditBox.TEXTTYPE_String);
-        ceb.setUnique(0,1,"100");
+        ceb.setUniqueColumn(1);
+        ceb.setOwnData(0,"a1");
 
         String[] row = new String[5];
         row[0] = "a1";row[1] = "b1";row[2] = "c1";row[3] = "d1";row[4] = "e1";

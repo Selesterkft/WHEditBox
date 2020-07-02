@@ -74,9 +74,12 @@ public class WHEditBox extends LinearLayout {
     private int rowColumn = 0;
     private int uniqueColumn = -1;
 
-    public void setUnique(int rowColumn, int uniqueColumn, String ownRowID){
+    public void setUniqueColumn(int uniqueColumn) {
+        this.uniqueColumn = uniqueColumn;
+    }
+
+    public void setOwnData(int rowColumn, String ownRowID){
         this.ownRowID       = ownRowID;
-        this.uniqueColumn   = uniqueColumn;
         this.rowColumn      = rowColumn;
     }
 
@@ -505,7 +508,7 @@ public class WHEditBox extends LinearLayout {
         if( maxCount > 0 && counterColumn > -1){
             int count = 0;
             for (int dsNum = 0; dsNum < dataSource.size(); dsNum++) {
-                if (dataSource.get(dsNum)[counterColumn].equals(EdText)) {
+                if (dataSource.get(dsNum)[counterColumn].equals(EdText) && !dataSource.get(dsNum)[rowColumn].equals(ownRowID)) {
                     count++;
                 }
             }
