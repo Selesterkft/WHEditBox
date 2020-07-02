@@ -74,6 +74,12 @@ public class WHEditBox extends LinearLayout {
     private int rowColumn = 0;
     private int uniqueColumn = -1;
 
+    private boolean debugMode = false;
+
+    public void setDebugMode(boolean debugMode) {
+        this.debugMode = debugMode;
+    }
+
     public void setUniqueColumn(int uniqueColumn) {
         this.uniqueColumn = uniqueColumn;
     }
@@ -227,12 +233,14 @@ public class WHEditBox extends LinearLayout {
                 String _text = EDText.getText().toString();
                 String errorString = checker(_text);
                 EDText.setText(_text);
+                if(debugMode) Log.i("WHEditBox","OnEditorActionListener - "+_text);
                 if( !errorString.equals("00000") ){
                     if(getErrorContent() == ERRORCONTENT_Erase){
                         EDText.setText("");
                     }else if(getErrorContent() == ERRORCONTENT_SelectedAll){
                         EDText.selectAll();
                     }
+                    if(debugMode) Log.i("WHEditBox","OnDetectError - errorString:"+errorString+" - value: "+_text);
                     detect.OnDetectError( errorString, _text );
                 }else {
                     if (popup != null) {
@@ -240,6 +248,7 @@ public class WHEditBox extends LinearLayout {
                         imm.hideSoftInputFromWindow(popup.getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                         popup.dismiss();
                     }
+                    if(debugMode) Log.i("WHEditBox","OnDetectBarcode - value: "+_text);
                     detect.OnDetectBarcode( _text );
                 }
             }
@@ -282,6 +291,7 @@ public class WHEditBox extends LinearLayout {
         EDText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
+                if(debugMode) Log.i("WHEditBox","setOnFocusChangeListener");
                 activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                 InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(EDText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -414,14 +424,18 @@ public class WHEditBox extends LinearLayout {
 
         @Override
         public void afterTextChanged(Editable s) {
+            if(debugMode) Log.i("WHEditBox","afterTextChanged");
             if( !suffix.equals("") ) {
                 int suffixLen = suffix.length();
                 //Log.i("TAG", s.toString());
                 if (s.length() > suffixLen) {
                     if (s.toString().substring(s.length() - suffixLen, s.length()).equals(suffix)) {
                         String _text = s.toString().substring(0, s.toString().length() - suffixLen);
+                        if(debugMode) Log.i("WHEditBox","value: "+_text);
                         _text = trimFromTo( _text );
+                        if(debugMode) Log.i("WHEditBox","trimmed value: "+_text);
                         String errorString = checker(_text);
+                        if(debugMode) Log.i("WHEditBox","checked value: "+_text + " - errorString: " + errorString);
                         EDText.setText(_text);
                         if( !errorString.equals("00000") ){
                             if(getErrorContent() == ERRORCONTENT_Nothing){
@@ -437,6 +451,7 @@ public class WHEditBox extends LinearLayout {
                                 imm.hideSoftInputFromWindow(popup.getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                                 popup.dismiss();
                             }
+                            if(debugMode) Log.i("WHEditBox","OnDetectBarcode value: "+EDText.getText().toString());
                             detect.OnDetectBarcode( EDText.getText().toString() );
                         }
                     }

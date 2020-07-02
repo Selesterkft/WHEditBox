@@ -43,13 +43,11 @@ public class MainActivity extends AppCompatActivity {
                 String[] row1 = new String[5];
                 row1[0] = "a2";row1[1] = "b2";row1[2] = "c1";row1[3] = "d2";row1[4] = "e2";
                 list.add( row1 );
-
             }
 
             @Override
             public void OnDetectError(String errorResult, String value) {
                 Log.i("TAG",errorResult + " - " + value);
-
             }
 
             @Override
