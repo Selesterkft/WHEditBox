@@ -25,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.security.Key;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WHEditBox extends LinearLayout {
 
@@ -66,6 +68,13 @@ public class WHEditBox extends LinearLayout {
     private int minLength, maxLength, trimFrom, trimTo, textType;
     private String chkString;
     private int errorContent;
+    private List<String[]> dataSource = null;
+
+    private int uniqueColumn = -1;
+
+    public void setDataSource(List<String[]> dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public int getErrorContent() {
         return errorContent;
@@ -77,6 +86,10 @@ public class WHEditBox extends LinearLayout {
 
     public int getTextType() {
         return textType;
+    }
+
+    public void setUniqueColumn(int column){
+        uniqueColumn = column;
     }
 
     public void setTextType(int textType) {
@@ -139,7 +152,7 @@ public class WHEditBox extends LinearLayout {
         setTrimTo(0);
         setTextType(TEXTTYPE_String);
         errorContent = ERRORCONTENT_Nothing;
-        chkString ="000";
+        chkString ="0000";
         BG = typedArray.getResourceId(R.styleable.WHEditBox_backgroundStyle,0);
         boolean setDelBtn = typedArray.getBoolean(R.styleable.WHEditBox_setDelBtn,false);
         selectBG = typedArray.getResourceId(R.styleable.WHEditBox_selectBackgroundStyle,0);
@@ -199,7 +212,7 @@ public class WHEditBox extends LinearLayout {
                 String _text = EDText.getText().toString();
                 String errorString = checker(_text);
                 EDText.setText(_text);
-                if( !errorString.equals("000") ){
+                if( !errorString.equals("0000") ){
                     if(getErrorContent() == ERRORCONTENT_Erase){
                         EDText.setText("");
                     }else if(getErrorContent() == ERRORCONTENT_SelectedAll){
@@ -239,11 +252,11 @@ public class WHEditBox extends LinearLayout {
             EDText.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.i("TAG", "CLICK: " + EDText.getText().toString());
+                   //Log.i("TAG", "CLICK: " + EDText.getText().toString());
                     if (writeType == WRITETYPE_ClickDialog || writeType == WRITETYPE_FocusDialog) {
                         showDialog();
                     } else if (writeType == WRITETYPE_ClickKeyboard) {
-                        Log.i("TAG", "SHOW KEYBOARD");
+                        //Log.i("TAG", "SHOW KEYBOARD");
                         InputMethodManager imm = (InputMethodManager) EDText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                         if (imm.isActive()) imm.toggleSoftInput(1, 0);
                     }
@@ -259,7 +272,7 @@ public class WHEditBox extends LinearLayout {
                 imm.hideSoftInputFromWindow(EDText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
                 if( writeType != WRITETYPE_None ) {
-                    Log.i("TAG","HIDE KEYBOARD");
+                   // Log.i("TAG","HIDE KEYBOARD");
 
                     if( writeType == WRITETYPE_FocusDialog ){
                         if(hasFocus){
@@ -278,13 +291,13 @@ public class WHEditBox extends LinearLayout {
                     String _text = EDText.getText().toString();
                     String errorString = checker(_text);
                     EDText.setText(_text);
-                    if( !errorString.equals("000") ){
+                    if( !errorString.equals("0000") ){
                         if(getErrorContent() == ERRORCONTENT_Erase){
                             EDText.setText("");
                         }else if(getErrorContent() == ERRORCONTENT_SelectedAll){
                             EDText.selectAll();
                         }
-                        detect.OnDetectError( errorString, EDText.getText().toString() );
+                        detect.OnDetectError( errorString, _text );
                     }else{
                         detect.OnFocusOutListener(EDText.getText().toString());
                     }
@@ -359,15 +372,15 @@ public class WHEditBox extends LinearLayout {
 
     public void setSelectBackgroundFunc(int value) {
         if(value > 0) {
-            Log.i("TAG","" + value + ""+dpToPx(getContext(),value));
+            //Log.i("TAG","" + value + ""+dpToPx(getContext(),value));
             mainLayout.setBackgroundResource( value );
         }
-        Log.i("PARAM","setSelectBackground");
+        //Log.i("PARAM","setSelectBackground");
     }
 
     public void setDelBtnFunc(boolean value) {
         if( value ) delBtn.setVisibility(VISIBLE); else delBtn.setVisibility(GONE);
-        Log.i("PARAM","setDelBtnFunc");
+        //Log.i("PARAM","setDelBtnFunc");
     }
 
 
@@ -388,14 +401,14 @@ public class WHEditBox extends LinearLayout {
         public void afterTextChanged(Editable s) {
             if( !suffix.equals("") ) {
                 int suffixLen = suffix.length();
-                Log.i("TAG", s.toString());
+                //Log.i("TAG", s.toString());
                 if (s.length() > suffixLen) {
                     if (s.toString().substring(s.length() - suffixLen, s.length()).equals(suffix)) {
                         String _text = s.toString().substring(0, s.toString().length() - suffixLen);
                         _text = trimFromTo( _text );
                         String errorString = checker(_text);
                         EDText.setText(_text);
-                        if( !errorString.equals("000") ){
+                        if( !errorString.equals("0000") ){
                             if(getErrorContent() == ERRORCONTENT_Nothing){
                             }else if(getErrorContent() == ERRORCONTENT_Erase){
                                 EDText.setText("");
@@ -447,9 +460,9 @@ public class WHEditBox extends LinearLayout {
 
     private String checker(String EdText){
 
-        // MinLength, MaxLength, TextType
+        // MinLength, MaxLength, TextType, Unique
 
-        String result = "000";
+        String result = "0000";
         if(getMinLength() > 0){
             if( EdText.length() < getMinLength() ){
                 result = changeStringatIndex(0, result, '1');
@@ -468,6 +481,13 @@ public class WHEditBox extends LinearLayout {
         if(getTextType() == TEXTTYPE_Long){
             if( !isLong(EdText) ){
                 result = changeStringatIndex(2, result, '1');
+            }
+        }
+        if (uniqueColumn > -1) {
+            for (int dsNum = 0; dsNum < dataSource.size(); dsNum++) {
+                if (dataSource.get(dsNum)[uniqueColumn].equals(EdText)) {
+                    result = changeStringatIndex(3, result, '1');
+                }
             }
         }
         return  result;
@@ -494,5 +514,4 @@ public class WHEditBox extends LinearLayout {
         }
         return true;
     }
-
 }
