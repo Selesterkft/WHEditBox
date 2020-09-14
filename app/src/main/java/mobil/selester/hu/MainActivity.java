@@ -1,8 +1,8 @@
 package mobil.selester.hu;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 
 import java.util.ArrayList;
